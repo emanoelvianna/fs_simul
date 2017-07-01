@@ -1,11 +1,10 @@
-CFLAGS = -Wall
-LIBS=
+GCC=bin/gcc
 
-SRC=$(wildcard *.c)
+all: clean simulfs
 
-simulfs: $(SRC)
-	gcc -o $@ $^ $(CFLAGS) $(LIBS)
-	
+simulfs:
+	gcc -std=c11 -fno-stack-protector *.c -o simulfs
+
 clean:
 	rm -f *.o
 	rm -f simulfs
