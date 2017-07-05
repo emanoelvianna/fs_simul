@@ -4,6 +4,10 @@
 
 #include "filesystem.h"
 
+/** 
+Requer: um tamanho para iniciar o disco virtual
+Garante: cria arquivo no sistema de arquivos do simulador e retorna 0
+**/
 int fs_format(unsigned int size)
 {
 	FILE *fp;
@@ -49,9 +53,11 @@ int fs_format(unsigned int size)
 	return 0;
 }
 
-// Copia um arquivo do sistema de arquivos corrente para o simulador
-// Requer: um nome de arquivo de entrada valido
-// Garante: cria arquivo no sistema de arquivos do simulador e retorna 0
+/** 
+Copia um arquivo do sistema de arquivos corrente para o simulador
+Requer: um nome de arquivo de entrada valido
+Garante: cria arquivo no sistema de arquivos do simulador e retorna 0
+**/
 int fs_create(unsigned char *origem, unsigned char *destino)
 {
 	FILE *fp_in;
@@ -260,9 +266,11 @@ int fs_create(unsigned char *origem, unsigned char *destino)
 	return 0;
 }
 
-// Copia um arquivo do simulador para o sistema de arquivos corrente
-// Requer: nomes de arquivos de origem valido
-// Garante: cria arquivo no sistema de arquivos e retorna 0
+/**
+Copia um arquivo do simulador para o sistema de arquivos corrente
+Requer: nomes de arquivos de origem valido
+Garante: cria arquivo no sistema de arquivos e retorna 0
+**/
 int fs_read(unsigned char *origem, unsigned char *destino)
 {
 	FILE *fp;
@@ -377,10 +385,11 @@ int fs_read(unsigned char *origem, unsigned char *destino)
 	return 0;
 }
 
-// Exclui um arquivo do simulador
-// Requer: um nome de arquivo de entrada valido
-// Garante: define entrada_arquivo->sector_start como zero e apenda blocos co arquivo
-// na lista de blocos livres
+/**
+Exclui um arquivo do simulador
+Requer: um nome de arquivo de entrada valido
+Garante: define entrada_arquivo->sector_start como zero e apenda blocos co arquivo na lista de blocos livres
+**/
 unsigned int fs_del(unsigned char *file)
 {
 	FILE *fp;
@@ -499,9 +508,11 @@ unsigned int fs_del(unsigned char *file)
 	return 0;
 }
 
-// Exibe uma lista dos arquivos no simulador
-// Requer: TRUE
-// Garante: lista recursivamente estrutura de arquivos e diretorios
+/**
+Exibe uma lista dos arquivos no simulador
+Requer: TRUE
+Garante: lista recursivamente estrutura de arquivos e diretorios
+**/
 void fs_ls(unsigned char *nome)
 {
 	FILE *fp;
@@ -584,9 +595,11 @@ void fs_ls(unsigned char *nome)
 	fclose(fp);
 }
 
-// Exibe o conteudo de uma estrutura de diretorios recursivamente
-// Requer: lista de diretorios
-// Garante: lista recursivamente estrutura de arquivos e diretorios
+/**
+Exibe o conteudo de uma estrutura de diretorios recursivamente
+Requer: lista de diretorios
+Garante: lista recursivamente estrutura de arquivos e diretorios
+**/
 void fs_ls_print(FILE *fp, struct file_dir_entry *entry_t,
 				 unsigned int entry_l,
 				 unsigned char *str,
@@ -615,9 +628,11 @@ void fs_ls_print(FILE *fp, struct file_dir_entry *entry_t,
 	}
 }
 
-// Cria um diretorio no simulador
-// Requer: nome de diretorio valido
-// Garante: o novo diretorio eh criado e a funcao retorna 0
+/**
+Cria um diretorio no simulador
+Requer: nome de diretorio valido
+Garante: o novo diretorio eh criado e a funcao retorna 0
+**/
 int fs_mkdir(unsigned char *name)
 {
 	FILE *fp;
@@ -736,9 +751,11 @@ int fs_mkdir(unsigned char *name)
 	fclose(fp);
 }
 
-// Remove um diretorio vazio do sistema de arquivos
-// Requer: um node de diretorio valido
-// Garante: define entrada_dir->sector_start como zero e a funcao retorna 0
+/**
+Remove um diretorio vazio do sistema de arquivos
+Requer: um node de diretorio valido
+Garante: define entrada_dir->sector_start como zero e a funcao retorna 0
+**/
 int fs_rmdir(unsigned char *name)
 {
 	FILE *fp;
@@ -879,9 +896,11 @@ int fs_rmdir(unsigned char *name)
 	return 0;
 }
 
-// Exibe estatisticas do disco
-// Requer: TRUE
-// Garante: exibe estatisticas do disco
+/**
+Exibe estatisticas do disco
+Requer: TRUE
+Garante: exibe estatisticas do disco
+**/
 void fs_status(unsigned char debug)
 {
 	FILE *fp;
@@ -930,15 +949,13 @@ void fs_status(unsigned char debug)
 	fclose(fp);
 }
 
-//
-//
-// Funcoes auxiliares
-//
-//
+/** Funcoes auxiliares **/
 
-// Retorna o tamanho em bytes de um arquiv
-// Requer: descritor de arquivo valido
-// Garante: retorna o tamanho em bytes de um arquiv
+/**
+Retorna o tamanho em bytes de um arquivo
+Requer: descritor de arquivo valido
+Garante: retorna o tamanho em bytes de um arquivo
+**/
 int getFileSize(FILE *fp)
 {
 	int curr_pos = ftell(fp);
@@ -949,9 +966,11 @@ int getFileSize(FILE *fp)
 	return size;
 }
 
-// Le root_table
-// Requer: descritor de arquivo valido
-// Garante: retorna struct root_table_directory
+/**
+Le root_table
+Requer: descritor de arquivo valido
+Garante: retorna struct root_table_directory
+**/
 struct root_table_directory loadRootTable(FILE *fp)
 {
 	unsigned int curr_pos = ftell(fp);
@@ -975,9 +994,11 @@ struct root_table_directory loadRootTable(FILE *fp)
 	return root_t;
 }
 
-// Obtem o total de blocos livres do disco
-// Requer: descritor de arquivo valido
-// Garante: retorna total de blocos livres do disco
+/** 
+Obtem o total de blocos livres do disco
+Requer: descritor de arquivo valido
+Garante: retorna total de blocos livres do disco
+**/
 unsigned int getTotalFreeBlocks(FILE *fp)
 {
 	unsigned int curr_pos = ftell(fp);
@@ -1007,9 +1028,11 @@ unsigned int getTotalFreeBlocks(FILE *fp)
 	return tot_blocos_livres;
 }
 
-// Obtem o total de bytes usados por arquivos e diretorios
-// Requer: descritor de arquivos e directory_table
-// Garante: retorna total de bytes usados do disco
+/**
+Obtem o total de bytes usados por arquivos e diretorios
+Requer: descritor de arquivos e directory_table
+Garante: retorna total de bytes usados do disco
+**/
 unsigned int getTotalUsedBytes(FILE *fp, struct file_dir_entry *dir_t)
 {
 	unsigned int curr_pos = ftell(fp);
@@ -1042,9 +1065,11 @@ unsigned int getTotalUsedBytes(FILE *fp, struct file_dir_entry *dir_t)
 	return tot_bytes_usados;
 }
 
-// Escreve dados da root_table em disco
-// Requer: descritor de arquivo valido e ponteiro para struct root_table_directory
-// Garante: escreve dados da root_table em disco
+/**
+Escreve dados da root_table em disco
+Requer: descritor de arquivo valido e ponteiro para struct root_table_directory
+Garante: escreve dados da root_table em disco
+**/
 void writeRootTable(FILE *fp, struct root_table_directory *root_table)
 {
 	unsigned int curr_pos = ftell(fp);
@@ -1078,9 +1103,11 @@ void writeRootTable(FILE *fp, struct root_table_directory *root_table)
 	fseek(fp, curr_pos, SEEK_SET);
 }
 
-// Obtem a posicao do primeiro registro livre
-// Requer: uma lista de entrada file_dir_entry e seu comprimento
-// Garante: retorna indice da primeira posicao livre da lista
+/**
+Obtem a posicao do primeiro registro livre
+Requer: uma lista de entrada file_dir_entry e seu comprimento
+Garante: retorna indice da primeira posicao livre da lista
+**/
 unsigned int getFirstFreePos(struct file_dir_entry *entries, unsigned int list_l)
 {
 	struct file_dir_entry entry_v;
@@ -1094,9 +1121,11 @@ unsigned int getFirstFreePos(struct file_dir_entry *entries, unsigned int list_l
 	return pos_n;
 }
 
-// Realiza busca por nome em uma lista de entidades
-// Requer: termo de busca, lista de entidades e comprimento da mesma
-// Garante: retorna file_dir_entry do registro encontrado
+/**
+Realiza busca por nome em uma lista de entidades
+Requer: termo de busca, lista de entidades e comprimento da mesma
+Garante: retorna file_dir_entry do registro encontrado
+**/
 struct file_dir_entry searchEntry(unsigned char *palavra,
 								  struct file_dir_entry *entries,
 								  unsigned int list_l)
